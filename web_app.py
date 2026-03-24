@@ -214,7 +214,7 @@ with st.sidebar:
     st.divider()
     st.caption(f"🤖 모델: {GEMINI_MODEL}")
     st.caption("🌐 Google Search 연동")
- st.markdown("### 📝 기사 제목 입력")
+st.markdown("### 📝 기사 제목 입력")
 st.caption("한 줄에 하나씩 입력하세요. 영문 제목 그대로 붙여넣기 하시면 됩니다.")
 
 titles_input = st.text_area(
