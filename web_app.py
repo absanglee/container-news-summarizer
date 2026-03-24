@@ -255,7 +255,7 @@ if run_btn:
     not_relevant = [a for a in articles if not a.get("is_relevant")]
  
   # 요약 메트릭
-  st.divider()
+  st.divider() 
   col_a, col_b, col_c, col_d = st.columns(4)
   col_a.metric("📋 입력 기사", f"{len(articles)}건")
   col_b.metric("✅ 관련 기사", f"{len(relevant)}건")
