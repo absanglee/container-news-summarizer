@@ -104,36 +104,18 @@ def get_model():
 # ── 프롬프트 ─────────────────────────────────────────────────
 def build_prompt(titles):
     titles_text = "\n".join(f"{i+1}. {t.strip()}" for i, t in enumerate(titles))
-    return f"""
-You are a maritime industry news analyst specializing in container shipping.
+    return f"""You are a maritime shipping news analyst.
 
-Below is a list of news article titles. For each title:
-1. Search the web to find and read the full article content.
-2. Determine if the article is related to container ships or boxships.
-   (Relevant topics: containership orders, deliveries, charter rates, TEU capacity,
-   MSC/Maersk/COSCO/Evergreen/CMA CGM/ONE/HMM operations, newbuilds, scrapping, container ports)
-3. If related, include it with a Korean summary.
-4. If NOT related, mark it as not relevant.
+For each article title below:
+1. Search the web for the headline and read only the first 2-3 paragraphs.
+2. Check if it is about container ships or boxships (orders, deliveries, charter rates, TEU, MSC/Maersk/COSCO/Evergreen/CMA CGM/ONE/HMM, newbuilds, scrapping, container ports).
+3. If relevant, summarize in Korean in 2 sentences max.
+4. If not relevant, mark as false.
 
-Return ONLY valid JSON array (no markdown, no explanation):
-[
-  {{
-    "article_number": 1,
-    "input_title": "The title as given by the user",
-    "found_title": "Actual article title found on web",
-    "source_url": "URL of the article",
-    "is_relevant": true,
-    "relevance_score": 0.95,
-    "key_topics": ["topic1", "topic2"],
-    "korean_summary": "이 기사의 핵심 내용을 한국어로 3~5문장으로 요약. 선박명, 수치, 회사명 등 구체적인 정보를 포함하여 작성.",
-    "not_relevant_reason": ""
-  }}
-]
+Return ONLY a JSON array, no markdown:
+[{{"article_number":1,"input_title":"...","found_title":"...","source_url":"...","is_relevant":true,"relevance_score":0.95,"key_topics":["topic1"],"korean_summary":"2문장 이내 한국어 요약.","not_relevant_reason":""}}]
 
-For non-relevant articles set is_relevant to false, korean_summary to empty string,
-and explain in not_relevant_reason why it is not container/boxship related.
-
-ARTICLE TITLES:
+TITLES:
 {titles_text}
 """
 
