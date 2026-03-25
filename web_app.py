@@ -100,7 +100,6 @@ def get_model():
         tools="google_search_retrieval",
     )
 
-
 # ── 프롬프트 ─────────────────────────────────────────────────
 def build_prompt(titles):
     titles_text = "\n".join(f"{i+1}. {t.strip()}" for i, t in enumerate(titles))
@@ -167,12 +166,14 @@ def make_txt_report(articles):
     return "\n".join(lines)
 
 # ── 메인 UI ──────────────────────────────────────────────────
-model = get_model()
+api_key = get_api_key()
 
-if not model:
+if not api_key:
     st.error("❌ GEMINI_API_KEY가 설정되어 있지 않습니다.")
     st.info("👉 Streamlit Cloud → App settings → Secrets 에서 GEMINI_API_KEY를 입력해주세요.")
     st.stop()
+
+model = get_model(api_key)
 with st.sidebar:
     st.markdown("### ℹ️ 사용 방법")
     st.markdown("""
