@@ -85,10 +85,7 @@ st.divider()
 # ── Gemini 모델 ──────────────────────────────────────────────
 GEMINI_MODEL = "gemini-2.0-flash"
 @st.cache_resource
-def get_model():
-    api_key = get_api_key()
-    if not api_key:
-        return None
+def get_model(api_key: str):
     genai.configure(api_key=api_key)
     return genai.GenerativeModel(
         model_name=GEMINI_MODEL,
@@ -97,7 +94,6 @@ def get_model():
             "top_p": 0.95,
             "max_output_tokens": 8192,
         },
-        tools="google_search_retrieval",
     )
 
 # ── 프롬프트 ─────────────────────────────────────────────────
@@ -105,14 +101,14 @@ def build_prompt(titles):
     titles_text = "\n".join(f"{i+1}. {t.strip()}" for i, t in enumerate(titles))
     return f"""You are a maritime shipping news analyst.
 
-For each article title below:
-1. Search the web for the headline and read only the first 2-3 paragraphs.
+You have knowledge of recent shipping industry news. For each article title below:
+1. Based on your knowledge, determine what the article is likely about.
 2. Check if it is about container ships or boxships (orders, deliveries, charter rates, TEU, MSC/Maersk/COSCO/Evergreen/CMA CGM/ONE/HMM, newbuilds, scrapping, container ports).
-3. If relevant, summarize in Korean in 2 sentences max.
+3. If relevant, summarize key facts in Korean in 2 sentences max.
 4. If not relevant, mark as false.
 
 Return ONLY a JSON array, no markdown:
-[{{"article_number":1,"input_title":"...","found_title":"...","source_url":"...","is_relevant":true,"relevance_score":0.95,"key_topics":["topic1"],"korean_summary":"2문장 이내 한국어 요약.","not_relevant_reason":""}}]
+[{{"article_number":1,"input_title":"...","found_title":"...","source_url":"","is_relevant":true,"relevance_score":0.95,"key_topics":["topic1"],"korean_summary":"2문장 이내 한국어 요약.","not_relevant_reason":""}}]
 
 TITLES:
 {titles_text}
